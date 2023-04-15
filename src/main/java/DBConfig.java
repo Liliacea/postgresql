@@ -23,7 +23,7 @@ public class DBConfig {
                     (prop.getProperty("db.url"), prop.getProperty("db.user"),
                             prop.getProperty("db.password"));
 
-            connection.setAutoCommit(false);
+           // connection.setAutoCommit(false);
 
             System.out.println(prop.getProperty("db.url"));
             System.out.println(prop.getProperty("db.user"));
@@ -57,7 +57,7 @@ public class DBConfig {
                     " salary         REAL)";
             statement.executeUpdate(sql);
             statement.close();
-            connection.commit();
+           // connection.commit();
             System.out.println("-- Table created successfully");
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -95,7 +95,7 @@ public class DBConfig {
             */
 
             statement.close();
-            connection.rollback();
+          //  connection.rollback();
 
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -118,7 +118,7 @@ public class DBConfig {
             }
             rs.close();
             statement.close();
-            connection.rollback();
+          //  connection.rollback();
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
@@ -131,7 +131,7 @@ public class DBConfig {
             statement = getConnection().createStatement();
             sql = "UPDATE COMPANY set salary = 25000 where ID=2;";
             statement.executeUpdate(sql);
-            connection.commit();
+          //  connection.commit();
             statement.close();
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -144,9 +144,9 @@ public class DBConfig {
     public static void delete() {
         try {
             statement = getConnection().createStatement();
-            sql = "DELETE from COMPANY where ID=3;";
+            sql = "DELETE from COMPANY where ID=1;";
             statement.executeUpdate(sql);
-            connection.rollback();
+          //  connection.rollback();
             statement.close();
             System.out.println("-- Operation DELETE done successfully");
 
