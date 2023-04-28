@@ -15,26 +15,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DBConfigTest {
 
+
     @BeforeEach
     void setUp() {
-        Connection connection;
-              try {
-                  Class.forName("org.postgresql.Driver");
-                  Properties prop = new Properties();
-                  InputStream input = DBConfig.class.getClassLoader().getResourceAsStream("app.properties");
-                  prop.load(input);
-                  connection = DriverManager.getConnection
-                          (prop.getProperty("db.url"), prop.getProperty("db.user"),
-                                  prop.getProperty("db.password"));
-                  connection = ConnectionRollBack.create(connection);
+        DBConfig dbConfig = new DBConfig();
 
-              } catch (Exception e){
-                  e.printStackTrace();
-                  System.out.println("connection doesn't exist");
-              }
 
-                Person ivan = new Person(1,"ivan",20, "Mockow", 20000);
-        Person Nata = new Person(2,"Nata",30,"Quatar",30000);
+
+        Person ivan = new Person(1, "ivan", 20, "Mockow", 20000);
+        Person Nata = new Person(2, "Nata", 30, "Quatar", 30000);
     }
 
 
@@ -43,24 +32,6 @@ class DBConfigTest {
         assertNotNull(DBConfig.getConnection());
     }
 
-    @Test
-    void createTable() {
 
-    }
 
-    @Test
-    void insert() {
-    }
-
-    @Test
-    void select() {
-    }
-
-    @Test
-    void update() {
-    }
-
-    @Test
-    void delete() {
-    }
 }

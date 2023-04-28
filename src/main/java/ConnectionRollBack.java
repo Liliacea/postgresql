@@ -6,6 +6,7 @@ import java.sql.SQLException;
  * This class creates a connection that rolls the transaction back when closed.
  */
 public class ConnectionRollBack{
+
     /**
      * Creates a connection that rolls the transaction back when closed.
      *
