@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 
-public class CRUDaoImpl implements CRUDao{
-   static Connection connection;
+public class CRUDaoImpl implements CRUDao {
+    static Connection connection;
     static Statement statement;
     static String sql;
 
@@ -13,7 +13,7 @@ public class CRUDaoImpl implements CRUDao{
         this.connection = connection;
     }
 
-    public static Connection getConnection(){
+    public static Connection getConnection() {
         try {
             Class.forName("org.postgresql.Driver");
             Properties prop = new Properties();
@@ -32,7 +32,6 @@ public class CRUDaoImpl implements CRUDao{
     }
 
 
-
     @Override
     public Person insert(Person person) {
 
@@ -42,12 +41,11 @@ public class CRUDaoImpl implements CRUDao{
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             preparedStatement.setString(1, person.getName());
-            preparedStatement.setInt(2,person.getAge());
+            preparedStatement.setInt(2, person.getAge());
             preparedStatement.setString(3, person.getAdress());
             preparedStatement.setDouble(4, person.getSalary());
 
             preparedStatement.executeUpdate();
-
 
 
             statement.close();
@@ -63,7 +61,7 @@ public class CRUDaoImpl implements CRUDao{
 
         System.out.println("-- Records created successfully");
 
-    return person;
+        return person;
     }
 
     @Override
@@ -103,7 +101,7 @@ public class CRUDaoImpl implements CRUDao{
     }
 
     @Override
-    public boolean  createTable() {
+    public boolean createTable() {
         boolean isCreated = false;
         try {
             statement = connection.createStatement();
@@ -124,12 +122,12 @@ public class CRUDaoImpl implements CRUDao{
         }
 
         System.out.println("Table created successfully");
-     return isCreated;
+        return isCreated;
     }
 
     @Override
     public ArrayList<Person> select() {
-       ArrayList<Person> people = new ArrayList<>();
+        ArrayList<Person> people = new ArrayList<>();
         try {
             statement = connection.createStatement();
             ResultSet rs = statement.executeQuery("SELECT * FROM COMPANY;");
@@ -139,13 +137,12 @@ public class CRUDaoImpl implements CRUDao{
                 int age = rs.getInt("age");
                 String adress = rs.getString("adress");
                 float salary = rs.getFloat("salary");
-                people.add(new Person(id,name,age,adress,salary));
+                people.add(new Person(id, name, age, adress, salary));
                 System.out.println(String.format("ID=%s NAME=%s AGE=%s ADRESS=%s SALARY=%s", id, name, age, adress, salary));
             }
 
             rs.close();
             statement.close();
-
 
 
         } catch (Exception e) {
@@ -156,6 +153,6 @@ public class CRUDaoImpl implements CRUDao{
 
         System.out.println("-- Operation SELECT done successfully");
 
-       return people;
+        return people;
     }
 }

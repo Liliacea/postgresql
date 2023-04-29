@@ -1,16 +1,16 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.InputStream;
+
 import java.sql.Connection;
-import java.sql.DriverManager;
+
 import java.util.ArrayList;
-import java.util.Properties;
+
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+
 
 class CRUDaoImplTest {
 
@@ -18,19 +18,11 @@ class CRUDaoImplTest {
     CRUDaoImpl cruDao;
 
 
-
     @BeforeEach
     void setUp() {
-    Connection connection = CRUDaoImpl.getConnection();
+        Connection connection = CRUDaoImpl.getConnection();
         cruDao = new CRUDaoImpl(connection);
 
-    /*    Person ivan = new Person(1,"ivan",20, "Mockow", 20000);
-        Person Nata = new Person(2,"Nata",30,"Quatar",30000);
-        cruDao.createTable();
-        cruDao.insert(ivan);
-        cruDao.insert(Nata);
-
-     */
     }
 
     @Test
@@ -39,36 +31,34 @@ class CRUDaoImplTest {
     }
 
 
-
     @Test
     void createTable() {
         long m = System.currentTimeMillis();
         assertThat(cruDao.createTable(), is(true));
 
 
-        System.out.println(System.currentTimeMillis()-m);
+        System.out.println(System.currentTimeMillis() - m);
     }
 
     @Test
     void insert() {
-        Person ivan = new Person(1,"ivan",20, "Mockow", 20000);
-        Person Nata = new Person(2,"Nata",30,"Quatar",30000);
+        Person ivan = new Person(1, "ivan", 20, "Mockow", 20000);
+        Person Nata = new Person(2, "Nata", 30, "Quatar", 30000);
         long m = System.currentTimeMillis();
         cruDao.createTable();
         cruDao.insert(ivan);
         cruDao.insert(Nata);
-        assertThat(cruDao.select().get(0).getName(),is("ivan"));
+        assertThat(cruDao.select().get(0).getName(), is("ivan"));
 
 
-
-        System.out.println(System.currentTimeMillis()-m);
+        System.out.println(System.currentTimeMillis() - m);
     }
 
     @Test
     void select() {
         ArrayList<Person> people = new ArrayList<>();
-        Person ivan = new Person(1,"ivan",20, "Mockow", 20000);
-        Person Nata = new Person(2,"Nata",30,"Quatar",30000);
+        Person ivan = new Person(1, "ivan", 20, "Mockow", 20000);
+        Person Nata = new Person(2, "Nata", 30, "Quatar", 30000);
         people.add(ivan);
         people.add(Nata);
         cruDao.createTable();
@@ -79,14 +69,14 @@ class CRUDaoImplTest {
 
         assertThat(cruDao.select().size(), is(1));
 
-        System.out.println(System.currentTimeMillis()-m);
+        System.out.println(System.currentTimeMillis() - m);
     }
 
 
     @Test
     void update() {
-        Person ivan = new Person(1,"ivan",20, "Mockow", 20000);
-        Person Nata = new Person(2,"Nata",30,"Quatar",30000);
+        Person ivan = new Person(1, "ivan", 20, "Mockow", 20000);
+        Person Nata = new Person(2, "Nata", 30, "Quatar", 30000);
         cruDao.createTable();
         cruDao.insert(ivan);
         cruDao.insert(Nata);
@@ -99,22 +89,20 @@ class CRUDaoImplTest {
     @Test
     void delete() {
 
-        ArrayList<Person> people = new ArrayList<>();
-        Person ivan = new Person(1,"ivan",20, "Mockow", 20000);
-        Person Nata = new Person(2,"Nata",30,"Quatar",30000);
+
+        Person ivan = new Person(1, "ivan", 20, "Mockow", 20000);
+        Person Nata = new Person(2, "Nata", 30, "Quatar", 30000);
         cruDao.createTable();
         cruDao.insert(ivan);
         cruDao.insert(Nata);
         cruDao.delete(ivan);
 
 
-
-
         assertThat(cruDao.select().size(), is(1));
 
 
     }
-    }
+}
 
 
 
