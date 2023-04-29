@@ -14,30 +14,15 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 class CRUDaoImplTest {
 
-//Connection connection ;
-ArrayList <Person> person = new ArrayList<>();
+
     CRUDaoImpl cruDao;
 
 
 
     @BeforeEach
     void setUp() {
-    Connection connection = null;
-        try {
-            Class.forName("org.postgresql.Driver");
-            Properties prop = new Properties();
-            InputStream input = DBConfig.class.getClassLoader().getResourceAsStream("app.properties");
-            prop.load(input);
-            connection = DriverManager.getConnection
-                    (prop.getProperty("db.url"), prop.getProperty("db.user"),
-                            prop.getProperty("db.password"));
-            connection = ConnectionRollBack.create(connection);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("connection doesn't exist");
-        }
-       cruDao = new CRUDaoImpl(connection);
+    Connection connection = CRUDaoImpl.getConnection();
+        cruDao = new CRUDaoImpl(connection);
 
     /*    Person ivan = new Person(1,"ivan",20, "Mockow", 20000);
         Person Nata = new Person(2,"Nata",30,"Quatar",30000);
@@ -69,7 +54,10 @@ ArrayList <Person> person = new ArrayList<>();
         Person ivan = new Person(1,"ivan",20, "Mockow", 20000);
         Person Nata = new Person(2,"Nata",30,"Quatar",30000);
         long m = System.currentTimeMillis();
-        assertThat(cruDao.insert(ivan).getName(),is("ivan"));
+        cruDao.createTable();
+        cruDao.insert(ivan);
+        cruDao.insert(Nata);
+        assertThat(cruDao.select().get(0).getName(),is("ivan"));
 
 
 
@@ -81,13 +69,15 @@ ArrayList <Person> person = new ArrayList<>();
         ArrayList<Person> people = new ArrayList<>();
         Person ivan = new Person(1,"ivan",20, "Mockow", 20000);
         Person Nata = new Person(2,"Nata",30,"Quatar",30000);
-
+        people.add(ivan);
+        people.add(Nata);
+        cruDao.createTable();
         cruDao.insert(ivan);
 
 
         long m = System.currentTimeMillis();
 
-        assertThat(cruDao.select(), is(people));
+        assertThat(cruDao.select().size(), is(1));
 
         System.out.println(System.currentTimeMillis()-m);
     }
@@ -97,11 +87,12 @@ ArrayList <Person> person = new ArrayList<>();
     void update() {
         Person ivan = new Person(1,"ivan",20, "Mockow", 20000);
         Person Nata = new Person(2,"Nata",30,"Quatar",30000);
+        cruDao.createTable();
         cruDao.insert(ivan);
         cruDao.insert(Nata);
         cruDao.update(Nata);
 
-        assertThat(cruDao.select().get(2), is(15000));
+        assertThat(cruDao.select().get(1).getSalary(), is(15000.0));
 
     }
 
@@ -111,6 +102,7 @@ ArrayList <Person> person = new ArrayList<>();
         ArrayList<Person> people = new ArrayList<>();
         Person ivan = new Person(1,"ivan",20, "Mockow", 20000);
         Person Nata = new Person(2,"Nata",30,"Quatar",30000);
+        cruDao.createTable();
         cruDao.insert(ivan);
         cruDao.insert(Nata);
         cruDao.delete(ivan);
@@ -118,7 +110,7 @@ ArrayList <Person> person = new ArrayList<>();
 
 
 
-        assertNull(cruDao.select().get(1));
+        assertThat(cruDao.select().size(), is(1));
 
 
     }

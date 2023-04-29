@@ -1,14 +1,34 @@
+import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Properties;
 
 
 public class CRUDaoImpl implements CRUDao{
-    Connection connection;
+   static Connection connection;
     static Statement statement;
     static String sql;
 
     public CRUDaoImpl(Connection connection) {
         this.connection = connection;
+    }
+
+    public static Connection getConnection(){
+        try {
+            Class.forName("org.postgresql.Driver");
+            Properties prop = new Properties();
+            InputStream input = CRUDaoImpl.class.getClassLoader().getResourceAsStream("app.properties");
+            prop.load(input);
+            connection = DriverManager.getConnection
+                    (prop.getProperty("db.url"), prop.getProperty("db.user"),
+                            prop.getProperty("db.password"));
+            connection = ConnectionRollBack.create(connection);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("connection doesn't exist");
+        }
+        return connection;
     }
 
 
@@ -17,7 +37,7 @@ public class CRUDaoImpl implements CRUDao{
     public Person insert(Person person) {
 
         try {
-            statement = DBConfig.getConnection().createStatement();
+            statement = connection.createStatement();
             sql = "INSERT INTO COMPANY (name, age, adress, salary) VALUES (?,?,?,?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
@@ -49,7 +69,7 @@ public class CRUDaoImpl implements CRUDao{
     @Override
     public void delete(Person person) {
         try {
-            statement = DBConfig.getConnection().createStatement();
+            statement = connection.createStatement();
             sql = "DELETE from COMPANY where ID=1;";
             statement.executeUpdate(sql);
 
@@ -57,7 +77,7 @@ public class CRUDaoImpl implements CRUDao{
             System.out.println("-- Operation DELETE done successfully");
 
 
-            connection.close();
+            //connection.close();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -69,7 +89,7 @@ public class CRUDaoImpl implements CRUDao{
     @Override
     public void update(Person person) {
         try {
-            statement = DBConfig.getConnection().createStatement();
+            statement = connection.createStatement();
             sql = "UPDATE COMPANY set salary = 15000 where ID=2;";
             statement.executeUpdate(sql);
 
@@ -86,7 +106,7 @@ public class CRUDaoImpl implements CRUDao{
     public boolean  createTable() {
         boolean isCreated = false;
         try {
-            statement = DBConfig.getConnection().createStatement();
+            statement = connection.createStatement();
             sql = "CREATE TABLE public.COMPANY " +
                     "(id INT  PRIMARY KEY     NOT NULL GENERATED ALWAYS AS IDENTITY," +
                     " name           TEXT    NOT NULL, " +
@@ -111,7 +131,7 @@ public class CRUDaoImpl implements CRUDao{
     public ArrayList<Person> select() {
        ArrayList<Person> people = new ArrayList<>();
         try {
-            statement = DBConfig.getConnection().createStatement();
+            statement = connection.createStatement();
             ResultSet rs = statement.executeQuery("SELECT * FROM COMPANY;");
             while (rs.next()) {
                 int id = rs.getInt("id");
@@ -125,6 +145,7 @@ public class CRUDaoImpl implements CRUDao{
 
             rs.close();
             statement.close();
+
 
 
         } catch (Exception e) {

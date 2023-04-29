@@ -3,7 +3,7 @@ import java.util.List;
 
 public class Check {
     public static void main(String[] args) {
-        CRUDaoImpl cruDao = new CRUDaoImpl(DBConfig.getConnection());
+        CRUDaoImpl cruDao = new CRUDaoImpl(CRUDaoImpl.getConnection());
 
        // cruDao.createTable();
         Person ivan = new Person(1,"ivan",20, "Mockow", 20000);
@@ -12,10 +12,13 @@ public class Check {
         people.add(Nata);
         people.add(ivan);
         long m = System.currentTimeMillis();
-
-        cruDao.insert(Nata);
+        cruDao.createTable();
         cruDao.insert(ivan);
+        cruDao.insert(Nata);
 
+        cruDao.select();
+
+        cruDao.delete(ivan);
         cruDao.select();
 
 
